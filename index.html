@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Should Ayesha Invest? - A Real Money Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header .story {
+            font-size: 1.1em;
+            line-height: 1.6;
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .game-section {
+            padding: 40px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #f5576c;
+        }
+        
+        .question h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .option-card {
+            background: white;
+            border: 3px solid #dee2e6;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .option-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+        }
+        
+        .option-card .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .option-card .title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .option-card .description {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+        
+        .option-card .hint {
+            font-size: 0.85em;
+            color: #e74c3c;
+            margin-top: 10px;
+            font-style: italic;
+            display: none;
+        }
+        
+        .option-card:hover .hint {
+            display: block;
+        }
+        
+        .next-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        .next-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .next-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            padding: 20px;
+        }
+        
+        .reveal-animation {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .countdown {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .result-card.show {
+            animation: slideUp 0.6s forwards;
+        }
+        
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result-card.winner {
+            border: 4px solid #27ae60;
+            background: linear-gradient(135deg, #27ae6010, #2ecc7110);
+        }
+        
+        .result-card.user-choice {
+            border: 4px solid #667eea;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+        
+        .badge.your-pick {
+            background: #667eea;
+            left: 20px;
+            right: auto;
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-icon {
+            font-size: 3em;
+        }
+        
+        .result-details h3 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .result-amount {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+        }
+        
+        .final-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        
+        .share-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .share-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: white;
+            color: #2c3e50;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .share-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .confirmation-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .confirmation-box h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .game-section {
+                padding: 20px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Where Should Ayesha Invest?</h1>
+            <div class="story">
+                <strong>The year is 2011.</strong> Ayesha, a 28-year-old working woman in Lahore, has Rs. 5,000 extra every month. She wants to invest it for her future - maybe a house, her kids' education, or early retirement.<br><br>
+                <strong>She'll keep investing Rs. 5,000/month from January 2011 to February 2026.</strong><br>
+                That's Rs. 9,10,000 total over 182 months.<br><br>
+                <strong>But where should she invest it?</strong><br>
+                YOU decide. Let's see if you made the right choice...
+            </div>
+        </div>
+        
+        <div class="game-section">
+            <!-- Step 1: Choose Investment -->
+            <div class="step active" id="step1">
+                <div class="question">
+                    <h2>🤔 Three Financial Advisors Give Ayesha Different Advice:</h2>
+                    <p style="color: #555; margin-top: 10px;">Which one should she follow?</p>
+                </div>
+                
+                <div class="options">
+                    <div class="option-card" data-choice="bank">
+                        <div class="icon">🏦</div>
+                        <div class="title">Her Father Says</div>
+                        <div class="description">"Beta, keep it in the bank. It's safe, guaranteed returns, and you can access it anytime."</div>
+                        <div class="hint">The safest option, but is it the smartest?</div>
+                    </div>
+                    
+                    <div class="option-card" data-choice="usd">
+                        <div class="icon">💵</div>
+                        <div class="title">Her Uncle Says</div>
+                        <div class="description">"Buy dollars! The rupee keeps falling. Your money will be worth more as the dollar rises."</div>
+                        <div class="hint">Betting on Pakistan's currency weakness...</div>
+                    </div>
+                    
+                    <div class="option-card" data-choice="kse">
+                        <div class="icon">📈</div>
+                        <div class="title">Her Colleague Says</div>
+                        <div class="description">"Invest in the stock market (KSE-100)! Yes, it's risky, but historically stocks give the best returns."</div>
+                        <div class="hint">High risk, but potentially high reward?</div>
+                    </div>
+                </div>
+                
+                <button class="next-button" id="nextBtn" disabled>Help Ayesha Decide →</button>
+            </div>
+            
+            <!-- Step 2: Confirmation -->
+            <div class="step" id="step2">
+                <div class="confirmation-box">
+                    <h3>⚠️ Are You Sure About This?</h3>
+                    <div id="choiceWarning" style="margin: 20px 0;"></div>
+                    <p style="color: #856404; margin-top: 20px;">
+                        Ayesha will follow your advice and invest Rs. 5,000/month in <strong><span id="chosenStrategy"></span></strong> from January 2011 to February 2026.
+                    </p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="next-button" onclick="goBack()" style="background: #95a5a6;">← Go Back</button>
+                    <button class="next-button" onclick="showResults()">Yes, I'm Sure! Show Results →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Time Travel Animation -->
+            <div class="step" id="step3">
+                <div class="reveal-animation">
+                    <h2 style="font-size: 2em; color: #2c3e50; margin-bottom: 20px;">⏰ Fast Forward Through Time...</h2>
+                    <p style="font-size: 1.2em; color: #7f8c8d; margin-bottom: 30px;">
+                        Ayesha is investing Rs. 5,000 every single month...
+                    </p>
+                    <div class="countdown" id="countdown">2011</div>
+                    <p style="font-size: 1.1em; color: #7f8c8d;">
+                        Through economic ups and downs, political changes, and life events...<br>
+                        She never stopped.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Step 4: Results -->
+            <div class="step" id="step4">
+                <div class="question" style="border-left-color: #27ae60;">
+                    <h2>🎊 It's February 2026 - Let's See How Ayesha Did!</h2>
+                    <p style="color: #555; margin-top: 10px; font-size: 1.1em;">
+                        She invested <strong>Rs. 5,000/month for 182 months</strong> (January 2011 - February 2026) = Rs. 9,10,000 total
+                    </p>
+                </div>
+                
+                <div id="resultsContainer"></div>
+                
+                <div class="final-message" id="finalMessage"></div>
+                
+                <div class="share-section">
+                    <h3 style="margin-bottom: 20px; color: #2c3e50;">📢 Share This Eye-Opening Game!</h3>
+                    <a href="javascript:shareWhatsApp()" class="share-button">💬 Share on WhatsApp</a>
+                    <a href="javascript:shareFacebook()" class="share-button">📘 Share on Facebook</a>
+                </div>
+                
+                <button class="next-button" onclick="location.reload()" style="margin-top: 30px;">
+                    🔄 Play Again
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    const ayeshaGameData = [
+  {
+    "date": "2011-01",
+    "kse": 5000,
+    "usd": 5000,
+    "bank": 5000
+  },
+  {
+    "date": "2011-02",
+    "kse": 10086.67,
+    "usd": 10033.33,
+    "bank": 10045.83
+  },
+  {
+    "date": "2011-03",
+    "kse": 15259.35,
+    "usd": 15100.92,
+    "bank": 15137.92
+  },
+  {
+    "date": "2011-04",
+    "kse": 20514.96,
+    "usd": 20200.26,
+    "bank": 20276.68
+  },
+  {
+    "date": "2011-05",
+    "kse": 25852.95,
+    "usd": 25332.27,
+    "bank": 25462.55
+  },
+  {
+    "date": "2011-06",
+    "kse": 31274.0,
+    "usd": 30499.59,
+    "bank": 30695.96
+  },
+  {
+    "date": "2011-07",
+    "kse": 36772.77,
+    "usd": 35696.32,
+    "bank": 35977.34
+  },
+  {
+    "date": "2011-08",
+    "kse": 42350.03,
+    "usd": 40925.09,
+    "bank": 41307.13
+  },
+  {
+    "date": "2011-09",
+    "kse": 48007.72,
+    "usd": 46190.19,
+    "bank": 46685.78
+  },
+  {
+    "date": "2011-10",
+    "kse": 53738.36,
+    "usd": 51482.44,
+    "bank": 52113.73
+  },
+  {
+    "date": "2011-11",
+    "kse": 59543.95,
+    "usd": 56806.12,
+    "bank": 57591.44
+  },
+  {
+    "date": "2011-12",
+    "kse": 65427.61,
+    "usd": 62167.17,
+    "bank": 63119.37
+  },
+  {
+    "date": "2012-01",
+    "kse": 71379.82,
+    "usd": 67553.13,
+    "bank": 68697.96
+  },
+  {
+    "date": "2012-02",
+    "kse": 79456.54,
+    "usd": 73005.88,
+    "bank": 74155.95
+  },
+  {
+    "date": "2012-03",
+    "kse": 87739.87,
+    "usd": 78499.63,
+    "bank": 79650.32
+  },
+  {
+    "date": "2012-04",
+    "kse": 96221.61,
+    "usd": 84018.74,
+    "bank": 85181.32
+  },
+  {
+    "date": "2012-05",
+    "kse": 104894.19,
+    "usd": 89570.68,
+    "bank": 90749.2
+  },
+  {
+    "date": "2012-06",
+    "kse": 113750.59,
+    "usd": 95164.54,
+    "bank": 96354.19
+  },
+  {
+    "date": "2012-07",
+    "kse": 122784.3,
+    "usd": 100781.54,
+    "bank": 101996.55
+  },
+  {
+    "date": "2012-08",
+    "kse": 131989.24,
+    "usd": 106430.75,
+    "bank": 107676.53
+  },
+  {
+    "date": "2012-09",
+    "kse": 141359.75,
+    "usd": 112122.77,
+    "bank": 113394.37
+  },
+  {
+    "date": "2012-10",
+    "kse": 150890.51,
+    "usd": 117835.77,
+    "bank": 119150.34
+  },
+  {
+    "date": "2012-11",
+    "kse": 160576.55,
+    "usd": 123580.37,
+    "bank": 124944.67
+  },
+  {
+    "date": "2012-12",
+    "kse": 170413.19,
+    "usd": 129368.68,
+    "bank": 130777.64
+  },
+  {
+    "date": "2013-01",
+    "kse": 180396.03,
+    "usd": 135175.88,
+    "bank": 136649.49
+  },
+  {
+    "date": "2013-02",
+    "kse": 189495.94,
+    "usd": 140002.92,
+    "bank": 142446.61
+  },
+  {
+    "date": "2013-03",
+    "kse": 198706.96,
+    "usd": 144809.75,
+    "bank": 148277.55
+  },
+  {
+    "date": "2013-04",
+    "kse": 208026.68,
+    "usd": 149623.97,
+    "bank": 154142.5
+  },
+  {
+    "date": "2013-05",
+    "kse": 217452.78,
+    "usd": 154431.77,
+    "bank": 160041.66
+  },
+  {
+    "date": "2013-06",
+    "kse": 226983.05,
+    "usd": 159217.85,
+    "bank": 165975.24
+  },
+  {
+    "date": "2013-07",
+    "kse": 236615.35,
+    "usd": 164012.77,
+    "bank": 171943.43
+  },
+  {
+    "date": "2013-08",
+    "kse": 246347.66,
+    "usd": 168801.25,
+    "bank": 177946.43
+  },
+  {
+    "date": "2013-09",
+    "kse": 256178.01,
+    "usd": 173566.5,
+    "bank": 183984.45
+  },
+  {
+    "date": "2013-10",
+    "kse": 266104.51,
+    "usd": 178342.05,
+    "bank": 190057.7
+  },
+  {
+    "date": "2013-11",
+    "kse": 276125.35,
+    "usd": 183111.13,
+    "bank": 196166.37
+  },
+  {
+    "date": "2013-12",
+    "kse": 286238.78,
+    "usd": 187855.47,
+    "bank": 202310.67
+  },
+  {
+    "date": "2014-01",
+    "kse": 296443.12,
+    "usd": 192611.57,
+    "bank": 208490.82
+  },
+  {
+    "date": "2014-02",
+    "kse": 305858.0,
+    "usd": 197939.01,
+    "bank": 214707.01
+  },
+  {
+    "date": "2014-03",
+    "kse": 315335.5,
+    "usd": 203255.18,
+    "bank": 220959.47
+  },
+  {
+    "date": "2014-04",
+    "kse": 324896.07,
+    "usd": 208599.57,
+    "bank": 227248.4
+  },
+  {
+    "date": "2014-05",
+    "kse": 334527.92,
+    "usd": 213952.43,
+    "bank": 233574.01
+  },
+  {
+    "date": "2014-06",
+    "kse": 344218.77,
+    "usd": 219292.47,
+    "bank": 239936.53
+  },
+  {
+    "date": "2014-07",
+    "kse": 353990.21,
+    "usd": 224662.2,
+    "bank": 246336.16
+  },
+  {
+    "date": "2014-08",
+    "kse": 363830.02,
+    "usd": 230040.35,
+    "bank": 252773.12
+  },
+  {
+    "date": "2014-09",
+    "kse": 373725.49,
+    "usd": 235404.16,
+    "bank": 259247.63
+  },
+  {
+    "date": "2014-10",
+    "kse": 383699.27,
+    "usd": 240799.09,
+    "bank": 265759.91
+  },
+  {
+    "date": "2014-11",
+    "kse": 393738.72,
+    "usd": 246202.4,
+    "bank": 272310.17
+  },
+  {
+    "date": "2014-12",
+    "kse": 403830.75,
+    "usd": 251589.85,
+    "bank": 278898.65
+  },
+  {
+    "date": "2015-01",
+    "kse": 413999.01,
+    "usd": 257009.87,
+    "bank": 285525.56
+  },
+  {
+    "date": "2015-02",
+    "kse": 428408.08,
+    "usd": 262564.2,
+    "bank": 291477.31
+  },
+  {
+    "date": "2015-03",
+    "kse": 442928.26,
+    "usd": 268154.99,
+    "bank": 297448.9
+  },
+  {
+    "date": "2015-04",
+    "kse": 457557.13,
+    "usd": 273730.82,
+    "bank": 303440.4
+  },
+  {
+    "date": "2015-05",
+    "kse": 472292.39,
+    "usd": 279344.03,
+    "bank": 309451.87
+  },
+  {
+    "date": "2015-06",
+    "kse": 487131.82,
+    "usd": 284941.26,
+    "bank": 315483.37
+  },
+  {
+    "date": "2015-07",
+    "kse": 502073.28,
+    "usd": 290576.8,
+    "bank": 321534.98
+  },
+  {
+    "date": "2015-08",
+    "kse": 517114.75,
+    "usd": 296223.46,
+    "bank": 327606.77
+  },
+  {
+    "date": "2015-09",
+    "kse": 532254.25,
+    "usd": 301852.63,
+    "bank": 333698.79
+  },
+  {
+    "date": "2015-10",
+    "kse": 547489.91,
+    "usd": 307521.48,
+    "bank": 339811.12
+  },
+  {
+    "date": "2015-11",
+    "kse": 562819.91,
+    "usd": 313171.81,
+    "bank": 345943.82
+  },
+  {
+    "date": "2015-12",
+    "kse": 578242.5,
+    "usd": 318862.75,
+    "bank": 352096.97
+  },
+  {
+    "date": "2016-01",
+    "kse": 593756.0,
+    "usd": 324534.16,
+    "bank": 358270.63
+  },
+  {
+    "date": "2016-02",
+    "kse": 605824.52,
+    "usd": 329627.15,
+    "bank": 364240.94
+  },
+  {
+    "date": "2016-03",
+    "kse": 617951.87,
+    "usd": 334690.1,
+    "bank": 370227.43
+  },
+  {
+    "date": "2016-04",
+    "kse": 630137.36,
+    "usd": 339785.96,
+    "bank": 376230.13
+  },
+  {
+    "date": "2016-05",
+    "kse": 642380.32,
+    "usd": 344850.81,
+    "bank": 382249.08
+  },
+  {
+    "date": "2016-06",
+    "kse": 654680.09,
+    "usd": 349949.53,
+    "bank": 388284.34
+  },
+  {
+    "date": "2016-07",
+    "kse": 667036.05,
+    "usd": 355016.29,
+    "bank": 394335.95
+  },
+  {
+    "date": "2016-08",
+    "kse": 679447.56,
+    "usd": 360117.87,
+    "bank": 400403.94
+  },
+  {
+    "date": "2016-09",
+    "kse": 691914.02,
+    "usd": 365186.55,
+    "bank": 406488.37
+  },
+  {
+    "date": "2016-10",
+    "kse": 704434.82,
+    "usd": 370256.17,
+    "bank": 412589.27
+  },
+  {
+    "date": "2016-11",
+    "kse": 717009.39,
+    "usd": 375362.04,
+    "bank": 418706.7
+  },
+  {
+    "date": "2016-12",
+    "kse": 729637.15,
+    "usd": 380433.57,
+    "bank": 424840.7
+  },
+  {
+    "date": "2017-01",
+    "kse": 742317.54,
+    "usd": 385542.3,
+    "bank": 430991.31
+  },
+  {
+    "date": "2017-02",
+    "kse": 735718.83,
+    "usd": 395756.3,
+    "bank": 437248.37
+  },
+  {
+    "date": "2017-03",
+    "kse": 729040.75,
+    "usd": 405999.83,
+    "bank": 443523.67
+  },
+  {
+    "date": "2017-04",
+    "kse": 722282.03,
+    "usd": 416346.39,
+    "bank": 449817.28
+  },
+  {
+    "date": "2017-05",
+    "kse": 715441.34,
+    "usd": 426757.94,
+    "bank": 456129.25
+  },
+  {
+    "date": "2017-06",
+    "kse": 708517.32,
+    "usd": 437195.08,
+    "bank": 462459.63
+  },
+  {
+    "date": "2017-07",
+    "kse": 701508.55,
+    "usd": 447734.14,
+    "bank": 468808.47
+  },
+  {
+    "date": "2017-08",
+    "kse": 694413.58,
+    "usd": 458335.74,
+    "bank": 475175.83
+  },
+  {
+    "date": "2017-09",
+    "kse": 687230.88,
+    "usd": 468959.25,
+    "bank": 481561.76
+  },
+  {
+    "date": "2017-10",
+    "kse": 679958.9,
+    "usd": 479683.67,
+    "bank": 487966.31
+  },
+  {
+    "date": "2017-11",
+    "kse": 672596.01,
+    "usd": 490468.39,
+    "bank": 494389.55
+  },
+  {
+    "date": "2017-12",
+    "kse": 665140.53,
+    "usd": 501271.54,
+    "bank": 500831.52
+  },
+  {
+    "date": "2018-01",
+    "kse": 657590.71,
+    "usd": 512174.72,
+    "bank": 507292.28
+  },
+  {
+    "date": "2018-02",
+    "kse": 663990.2,
+    "usd": 527670.1,
+    "bank": 514405.99
+  },
+  {
+    "date": "2018-03",
+    "kse": 670417.29,
+    "usd": 543265.88,
+    "bank": 521549.35
+  },
+  {
+    "date": "2018-04",
+    "kse": 676837.99,
+    "usd": 558960.1,
+    "bank": 528722.47
+  },
+  {
+    "date": "2018-05",
+    "kse": 683269.27,
+    "usd": 574750.83,
+    "bank": 535925.48
+  },
+  {
+    "date": "2018-06",
+    "kse": 689728.47,
+    "usd": 590636.26,
+    "bank": 543158.51
+  },
+  {
+    "date": "2018-07",
+    "kse": 696180.82,
+    "usd": 606614.63,
+    "bank": 550421.67
+  },
+  {
+    "date": "2018-08",
+    "kse": 702643.68,
+    "usd": 622684.24,
+    "bank": 557715.09
+  },
+  {
+    "date": "2018-09",
+    "kse": 709134.78,
+    "usd": 638843.46,
+    "bank": 565038.9
+  },
+  {
+    "date": "2018-10",
+    "kse": 715618.59,
+    "usd": 655090.7,
+    "bank": 572393.23
+  },
+  {
+    "date": "2018-11",
+    "kse": 722112.83,
+    "usd": 671424.45,
+    "bank": 579778.2
+  },
+  {
+    "date": "2018-12",
+    "kse": 728635.63,
+    "usd": 687843.23,
+    "bank": 587193.95
+  },
+  {
+    "date": "2019-01",
+    "kse": 735150.69,
+    "usd": 704345.63,
+    "bank": 594640.59
+  },
+  {
+    "date": "2019-02",
+    "kse": 741676.13,
+    "usd": 715508.65,
+    "bank": 604595.93
+  },
+  {
+    "date": "2019-03",
+    "kse": 748230.42,
+    "usd": 726761.71,
+    "bank": 614634.23
+  },
+  {
+    "date": "2019-04",
+    "kse": 754776.55,
+    "usd": 738011.1,
+    "bank": 624756.18
+  },
+  {
+    "date": "2019-05",
+    "kse": 761332.98,
+    "usd": 749303.12,
+    "bank": 634962.48
+  },
+  {
+    "date": "2019-06",
+    "kse": 767918.58,
+    "usd": 760685.03,
+    "bank": 645253.83
+  },
+  {
+    "date": "2019-07",
+    "kse": 774495.57,
+    "usd": 772061.23,
+    "bank": 655630.95
+  },
+  {
+    "date": "2019-08",
+    "kse": 781082.81,
+    "usd": 783478.99,
+    "bank": 666094.54
+  },
+  {
+    "date": "2019-09",
+    "kse": 787699.52,
+    "usd": 794986.53,
+    "bank": 676645.33
+  },
+  {
+    "date": "2019-10",
+    "kse": 794307.19,
+    "usd": 806486.39,
+    "bank": 687284.04
+  },
+  {
+    "date": "2019-11",
+    "kse": 800925.04,
+    "usd": 818026.8,
+    "bank": 698011.41
+  },
+  {
+    "date": "2019-12",
+    "kse": 807572.67,
+    "usd": 829656.91,
+    "bank": 708828.17
+  },
+  {
+    "date": "2020-01",
+    "kse": 814210.83,
+    "usd": 841277.44,
+    "bank": 719735.07
+  },
+  {
+    "date": "2020-02",
+    "kse": 825823.81,
+    "usd": 843773.63,
+    "bank": 728033.85
+  },
+  {
+    "date": "2020-03",
+    "kse": 837497.05,
+    "usd": 846254.91,
+    "bank": 736370.68
+  },
+  {
+    "date": "2020-04",
+    "kse": 849190.28,
+    "usd": 848721.21,
+    "bank": 744745.71
+  },
+  {
+    "date": "2020-05",
+    "kse": 860923.14,
+    "usd": 851172.5,
+    "bank": 753159.13
+  },
+  {
+    "date": "2020-06",
+    "kse": 872715.68,
+    "usd": 853608.72,
+    "bank": 761611.11
+  },
+  {
+    "date": "2020-07",
+    "kse": 884526.9,
+    "usd": 856029.85,
+    "bank": 770101.82
+  },
+  {
+    "date": "2020-08",
+    "kse": 896376.84,
+    "usd": 858435.82,
+    "bank": 778631.46
+  },
+  {
+    "date": "2020-09",
+    "kse": 908285.89,
+    "usd": 860826.59,
+    "bank": 787200.18
+  },
+  {
+    "date": "2020-10",
+    "kse": 920212.38,
+    "usd": 863202.12,
+    "bank": 795808.19
+  },
+  {
+    "date": "2020-11",
+    "kse": 932176.71,
+    "usd": 865562.36,
+    "bank": 804455.64
+  },
+  {
+    "date": "2020-12",
+    "kse": 944199.63,
+    "usd": 867907.26,
+    "bank": 813142.73
+  },
+  {
+    "date": "2021-01",
+    "kse": 956238.8,
+    "usd": 870236.77,
+    "bank": 821869.63
+  },
+  {
+    "date": "2021-02",
+    "kse": 955926.36,
+    "usd": 894038.18,
+    "bank": 830294.09
+  },
+  {
+    "date": "2021-03",
+    "kse": 955585.99,
+    "usd": 917945.34,
+    "bank": 838753.65
+  },
+  {
+    "date": "2021-04",
+    "kse": 955217.53,
+    "usd": 941956.04,
+    "bank": 847248.45
+  },
+  {
+    "date": "2021-05",
+    "kse": 954820.82,
+    "usd": 966068.19,
+    "bank": 855778.66
+  },
+  {
+    "date": "2021-06",
+    "kse": 954395.7,
+    "usd": 990279.77,
+    "bank": 864344.4
+  },
+  {
+    "date": "2021-07",
+    "kse": 953942.01,
+    "usd": 1014588.85,
+    "bank": 872945.84
+  },
+  {
+    "date": "2021-08",
+    "kse": 953459.59,
+    "usd": 1038993.55,
+    "bank": 881583.11
+  },
+  {
+    "date": "2021-09",
+    "kse": 952948.26,
+    "usd": 1063492.09,
+    "bank": 890256.37
+  },
+  {
+    "date": "2021-10",
+    "kse": 952407.86,
+    "usd": 1088082.74,
+    "bank": 898965.77
+  },
+  {
+    "date": "2021-11",
+    "kse": 951838.23,
+    "usd": 1112763.82,
+    "bank": 907711.46
+  },
+  {
+    "date": "2021-12",
+    "kse": 951239.18,
+    "usd": 1137533.74,
+    "bank": 916493.6
+  },
+  {
+    "date": "2022-01",
+    "kse": 950610.55,
+    "usd": 1162390.93,
+    "bank": 925312.32
+  },
+  {
+    "date": "2022-02",
+    "kse": 993340.73,
+    "usd": 1206308.24,
+    "bank": 939950.99
+  },
+  {
+    "date": "2022-03",
+    "kse": 1036239.04,
+    "usd": 1250444.74,
+    "bank": 954742.15
+  },
+  {
+    "date": "2022-04",
+    "kse": 1079343.97,
+    "usd": 1294680.91,
+    "bank": 969687.38
+  },
+  {
+    "date": "2022-05",
+    "kse": 1122626.23,
+    "usd": 1339069.2,
+    "bank": 984788.29
+  },
+  {
+    "date": "2022-06",
+    "kse": 1166056.69,
+    "usd": 1383663.0,
+    "bank": 1000046.5
+  },
+  {
+    "date": "2022-07",
+    "kse": 1209675.82,
+    "usd": 1428342.29,
+    "bank": 1015463.65
+  },
+  {
+    "date": "2022-08",
+    "kse": 1253455.23,
+    "usd": 1473160.98,
+    "bank": 1031041.4
+  },
+  {
+    "date": "2022-09",
+    "kse": 1297366.6,
+    "usd": 1518173.77,
+    "bank": 1046781.41
+  },
+  {
+    "date": "2022-10",
+    "kse": 1341451.96,
+    "usd": 1563260.08,
+    "bank": 1062685.38
+  },
+  {
+    "date": "2022-11",
+    "kse": 1385683.55,
+    "usd": 1608475.02,
+    "bank": 1078755.02
+  },
+  {
+    "date": "2022-12",
+    "kse": 1430033.59,
+    "usd": 1653874.42,
+    "bank": 1094992.05
+  },
+  {
+    "date": "2023-01",
+    "kse": 1474545.4,
+    "usd": 1699337.09,
+    "bank": 1111398.22
+  },
+  {
+    "date": "2023-02",
+    "kse": 1522164.52,
+    "usd": 1700356.12,
+    "bank": 1133532.28
+  },
+  {
+    "date": "2023-03",
+    "kse": 1569900.23,
+    "usd": 1701423.01,
+    "bank": 1156007.57
+  },
+  {
+    "date": "2023-04",
+    "kse": 1617796.43,
+    "usd": 1702418.54,
+    "bank": 1178829.35
+  },
+  {
+    "date": "2023-05",
+    "kse": 1665825.61,
+    "usd": 1703402.27,
+    "bank": 1202002.97
+  },
+  {
+    "date": "2023-06",
+    "kse": 1713960.25,
+    "usd": 1704434.3,
+    "bank": 1225533.85
+  },
+  {
+    "date": "2023-07",
+    "kse": 1762245.24,
+    "usd": 1705394.35,
+    "bank": 1249427.49
+  },
+  {
+    "date": "2023-08",
+    "kse": 1810653.4,
+    "usd": 1706342.53,
+    "bank": 1273689.5
+  },
+  {
+    "date": "2023-09",
+    "kse": 1859157.47,
+    "usd": 1707339.45,
+    "bank": 1298325.55
+  },
+  {
+    "date": "2023-10",
+    "kse": 1907803.21,
+    "usd": 1708263.78,
+    "bank": 1323341.4
+  },
+  {
+    "date": "2023-11",
+    "kse": 1956563.64,
+    "usd": 1709176.15,
+    "bank": 1348742.91
+  },
+  {
+    "date": "2023-12",
+    "kse": 2005411.7,
+    "usd": 1710137.72,
+    "bank": 1374536.03
+  },
+  {
+    "date": "2024-01",
+    "kse": 2054393.9,
+    "usd": 1711026.07,
+    "bank": 1400726.8
+  },
+  {
+    "date": "2024-02",
+    "kse": 2244953.65,
+    "usd": 1716026.07,
+    "bank": 1423819.52
+  },
+  {
+    "date": "2024-03",
+    "kse": 2435902.94,
+    "usd": 1721026.07,
+    "bank": 1447210.52
+  },
+  {
+    "date": "2024-04",
+    "kse": 2627259.41,
+    "usd": 1726026.07,
+    "bank": 1470903.66
+  },
+  {
+    "date": "2024-05",
+    "kse": 2818971.21,
+    "usd": 1731026.07,
+    "bank": 1494902.83
+  },
+  {
+    "date": "2024-06",
+    "kse": 3010989.98,
+    "usd": 1736026.07,
+    "bank": 1519211.99
+  },
+  {
+    "date": "2024-07",
+    "kse": 3203344.66,
+    "usd": 1741026.07,
+    "bank": 1543835.14
+  },
+  {
+    "date": "2024-08",
+    "kse": 3395992.24,
+    "usd": 1746026.07,
+    "bank": 1568776.35
+  },
+  {
+    "date": "2024-09",
+    "kse": 3588891.58,
+    "usd": 1751026.07,
+    "bank": 1594039.71
+  },
+  {
+    "date": "2024-10",
+    "kse": 3782078.02,
+    "usd": 1756026.07,
+    "bank": 1619629.39
+  },
+  {
+    "date": "2024-11",
+    "kse": 3975513.58,
+    "usd": 1761026.07,
+    "bank": 1645549.6
+  },
+  {
+    "date": "2024-12",
+    "kse": 4169161.42,
+    "usd": 1766026.07,
+    "bank": 1671804.62
+  },
+  {
+    "date": "2025-01",
+    "kse": 4363060.81,
+    "usd": 1771026.07,
+    "bank": 1698398.76
+  },
+  {
+    "date": "2025-02",
+    "kse": 4394840.98,
+    "usd": 1777109.07,
+    "bank": 1716136.75
+  },
+  {
+    "date": "2025-03",
+    "kse": 4426651.64,
+    "usd": 1783131.25,
+    "bank": 1734007.78
+  },
+  {
+    "date": "2025-04",
+    "kse": 4458492.63,
+    "usd": 1789220.36,
+    "bank": 1752012.84
+  },
+  {
+    "date": "2025-05",
+    "kse": 4490363.75,
+    "usd": 1795312.52,
+    "bank": 1770152.93
+  },
+  {
+    "date": "2025-06",
+    "kse": 4522264.83,
+    "usd": 1801343.31,
+    "bank": 1788429.08
+  },
+  {
+    "date": "2025-07",
+    "kse": 4554195.68,
+    "usd": 1807441.57,
+    "bank": 1806842.3
+  },
+  {
+    "date": "2025-08",
+    "kse": 4586156.13,
+    "usd": 1813542.88,
+    "bank": 1825393.61
+  },
+  {
+    "date": "2025-09",
+    "kse": 4618146.0,
+    "usd": 1819582.27,
+    "bank": 1844084.07
+  },
+  {
+    "date": "2025-10",
+    "kse": 4650165.13,
+    "usd": 1825689.67,
+    "bank": 1862914.7
+  },
+  {
+    "date": "2025-11",
+    "kse": 4682213.35,
+    "usd": 1831800.1,
+    "bank": 1881886.56
+  },
+  {
+    "date": "2025-12",
+    "kse": 4714290.47,
+    "usd": 1837848.08,
+    "bank": 1901000.71
+  },
+  {
+    "date": "2026-01",
+    "kse": 4700306.21,
+    "usd": 1843964.6,
+    "bank": 1961929.13
+  },
+  {
+    "date": "2026-02",
+    "kse": 4269961.42,
+    "usd": 1842642.43,
+    "bank": 1984096.01
+  }
+];
+    </script>
+    <script>
+        let userChoice = null;
+        let currentStep = 1;
+        
+        // Calculate final values from data
+        const finalData = ayeshaGameData[ayeshaGameData.length - 1];
+        const totalInvested = 910000;
+        
+        const results = {
+            bank: {
+                invested: totalInvested,
+                final: Math.round(finalData.bank),
+                multiplier: (finalData.bank / totalInvested).toFixed(2),
+                icon: '🏦',
+                name: 'Bank Deposits',
+                annualReturn: (((Math.pow(finalData.bank / totalInvested, 1/15.17) - 1) * 100)).toFixed(1),
+                description: 'Savings account with variable interest'
+            },
+            usd: {
+                invested: totalInvested,
+                final: Math.round(finalData.usd),
+                multiplier: (finalData.usd / totalInvested).toFixed(2),
+                icon: '💵',
+                name: 'US Dollars',
+                annualReturn: (((Math.pow(finalData.usd / totalInvested, 1/15.17) - 1) * 100)).toFixed(1),
+                description: 'Buying dollars as PKR weakened'
+            },
+            kse: {
+                invested: totalInvested,
+                final: Math.round(finalData.kse),
+                multiplier: (finalData.kse / totalInvested).toFixed(2),
+                icon: '📈',
+                name: 'KSE-100 Stock Market',
+                annualReturn: (((Math.pow(finalData.kse / totalInvested, 1/15.17) - 1) * 100)).toFixed(1),
+                description: 'SIP in Pakistan Stock Exchange Index'
+            }
+        };
+        
+        // Handle option selection
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                userChoice = this.dataset.choice;
+                document.getElementById('nextBtn').disabled = false;
+            });
+        });
+        
+        // Choice warnings
+        const choiceWarnings = {
+            bank: {
+                icon: '🏦',
+                text: 'Playing it safe with bank savings? Your father would be proud... but will your future self thank you? Banks give steady returns, but inflation might eat away at your gains!'
+            },
+            usd: {
+                icon: '💵',
+                text: 'Betting on the dollar? Smart move if the rupee keeps falling... but what if it stabilizes? Currency trading is a gamble on Pakistan\'s economic future!'
+            },
+            kse: {
+                icon: '📈',
+                text: 'Stock market! Your colleague\'s favorite! Volatile, exciting, and historically the highest returns... but can you handle the ups and downs for 15 years?'
+            }
+        };
+        
+        // Next button
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (userChoice) {
+                const choiceName = results[userChoice].name;
+                const warning = choiceWarnings[userChoice];
+                
+                document.getElementById('chosenStrategy').textContent = choiceName;
+                document.getElementById('choiceWarning').innerHTML = `
+                    <div style="font-size: 3em; margin-bottom: 10px;">${warning.icon}</div>
+                    <p style="font-size: 1.05em; line-height: 1.6; color: #555;">
+                        ${warning.text}
+                    </p>
+                `;
+                showStep(2);
+            }
+        });
+        
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goBack() {
+            showStep(1);
+        }
+        
+        function showResults() {
+            showStep(3);
+            
+            // Animate countdown
+            let year = 2011;
+            const countdownEl = document.getElementById('countdown');
+            const interval = setInterval(() => {
+                year++;
+                countdownEl.textContent = year;
+                if (year >= 2026) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        displayResults();
+                        showStep(4);
+                    }, 1000);
+                }
+            }, 150);
+        }
+        
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const finalMessageEl = document.getElementById('finalMessage');
+            
+            // Sort results by final amount
+            const sortedResults = Object.entries(results).sort((a, b) => b[1].final - a[1].final);
+            const winner = sortedResults[0][0];
+            const userResult = results[userChoice];
+            const youWon = userChoice === winner;
+            
+            // Display each result
+            sortedResults.forEach(([key, data], index) => {
+                const isWinner = key === winner;
+                const isUserChoice = key === userChoice;
+                
+                setTimeout(() => {
+                    const card = document.createElement('div');
+                    card.className = 'result-card' + (isWinner ? ' winner' : '') + (isUserChoice ? ' user-choice' : '');
+                    
+                    let badges = '';
+                    if (isWinner) badges += '<div class="badge">🏆 WINNER!</div>';
+                    if (isUserChoice) badges += '<div class="badge your-pick">👉 YOUR PICK</div>';
+                    
+                    card.innerHTML = `
+                        ${badges}
+                        <div class="result-header">
+                            <div class="result-icon">${data.icon}</div>
+                            <div class="result-details">
+                                <h3>${data.name}</h3>
+                                <p style="color: #7f8c8d;">${data.description}</p>
+                            </div>
+                        </div>
+                        <div class="result-amount">Rs. ${data.final.toLocaleString()}</div>
+                        <div class="result-stats">
+                            <div class="stat">
+                                <div class="stat-value">${data.multiplier}x</div>
+                                <div class="stat-label">Return Multiple</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">Rs. ${(data.final - data.invested).toLocaleString()}</div>
+                                <div class="stat-label">Total Gain</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${data.annualReturn}%</div>
+                                <div class="stat-label">Annual Return</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                    setTimeout(() => card.classList.add('show'), 100);
+                }, index * 400);
+            });
+            
+            // Final message
+            setTimeout(() => {
+                let message = '';
+                
+                if (youWon) {
+                    message = `
+                        <h2 style="font-size: 2em; margin-bottom: 20px;">🎊 INCREDIBLE! YOU CHOSE THE WINNER! 🎊</h2>
+                        <p>Ayesha followed your advice and invested Rs. 5,000/month in ${userResult.name}.</p>
+                        <p style="margin-top: 20px; font-size: 1.3em;">
+                            Her Rs. 9.10 lakh turned into <strong style="font-size: 1.3em;">Rs. ${(userResult.final/100000).toFixed(2)} lakhs!</strong>
+                        </p>
+                        <p style="margin-top: 20px;">
+                            That's Rs. ${((userResult.final - 910000)/100000).toFixed(2)} lakhs in profit! She can now afford a car, help with her children's education, or invest in her business!
+                        </p>
+                        <p style="margin-top: 20px; font-size: 1.2em;">
+                            <strong>The question is: Will YOU make the same smart choice Ayesha did?</strong>
+                        </p>
+                    `;
+                } else {
+                    const winnerData = results[winner];
+                    const difference = winnerData.final - userResult.final;
+                    
+                    message = `
+                        <h2 style="font-size: 2em; margin-bottom: 20px;">😮 Here's What Ayesha Missed...</h2>
+                        <p>You chose ${userResult.name}, and Ayesha ended up with Rs. ${(userResult.final/100000).toFixed(2)} lakhs.</p>
+                        <p style="margin-top: 20px; font-size: 1.3em; color: #fff59d;">
+                            BUT... if she had chosen ${winnerData.name}, she would have <strong>Rs. ${(difference/100000).toFixed(2)} lakhs MORE!</strong>
+                        </p>
+                        <p style="margin-top: 20px;">
+                            That's the difference between a down payment on a small apartment vs. buying it outright!
+                        </p>
+                        <p style="margin-top: 20px; font-size: 1.2em;">
+                            <strong>The good news? It's not too late for YOU to make the right choice TODAY!</strong>
+                        </p>
+                    `;
+                }
+                
+                finalMessageEl.innerHTML = message;
+            }, sortedResults.length * 400 + 500);
+        }
+        
+        function shareWhatsApp() {
+            const text = `🤯 I just discovered something CRAZY!
+
+Rs. 5,000/month invested from January 2011 to February 2026 would be worth:
+📈 KSE-100 Stocks: Rs. ${(results.kse.final/100000).toFixed(2)} LAKHS! (${results.kse.multiplier}x return!)
+🏦 Bank: Rs. ${(results.bank.final/100000).toFixed(2)} lakhs (${results.bank.multiplier}x)
+💵 Dollars: Rs. ${(results.usd.final/100000).toFixed(2)} lakhs (${results.usd.multiplier}x)
+
+This is REAL DATA. No BS. Play the game yourself:
+${window.location.href}
+
+Which would YOU have chosen? 🤔`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+        
+        function shareFacebook() {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
